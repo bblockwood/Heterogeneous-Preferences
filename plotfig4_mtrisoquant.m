@@ -25,7 +25,7 @@
 % 
 % REQUIRED FUNCTIONS
 %   BROYDEN
-%   COMPUTEYJACROW
+%   FINDYJACROW
 %   LAGRANGIAN
 %   LOADCOMPECON
 %   NCPSOLVE
@@ -49,10 +49,6 @@ options = optimset('Display', 'iter','MaxFunEvals',1000);
 
 lambdaArray = simulateagents(nAgents);  % simulate agents
 thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*(1-phibar));
-
-% ystars = ystar(lambdaArray,2,0.4);
-% hist(ystars(ystars < 15))
-% median(ystars)
 
 % Generate matrix of phi deviations
 varPhiArray = [0.01 0.05:0.05:0.6];
@@ -94,36 +90,6 @@ for iPhiDist = 1:nPhiDists
     corrArray(iPhiDist) = corrMrsEarnings(2,1);    
 end
 
-% % Find moments of lambda distribution
-% meanLambda = mean(lambdaArray);
-% varLambda = var(lambdaArray);
-% 
-% % Find var(ln(mrs)) isoquants
-% varMrsBar = (1-phibar)^2*varLambda;
-% mrsIso = zeros(nPhiDists,1);        % we're solving for this
-% sol = phibar;                       % initial guess is varMrsBar
-% for iPhiDist = 1:nPhiDists
-%     varPhi = varPhiArray(iPhiDist);
-%     disp(['var(phi) = ' num2str(varPhi)]);   % echo status
-%     
-%     if varPhi==0, mrsIso(iPhiDist)=phibar; continue, end % by design
-%     
-%     sol = fsolve(@(x) (1-x)^2*varLambda + ...
-%         varPhi*(meanLambda^2 + varLambda) - varMrsBar,sol,options);
-% 
-%     mrsIso(iPhiDist) = sol;
-% end
-% 
-% plot(varPhiArray,[mtrIso mrsIso]);%figure(gcf)
-% jbfill(varPhiArray,mrsIso',mtrIso',[1 0 0],[0 0 0],1,0.5)
-% axis([0 0.5 0 1]);
-% xlabel('var(\phi)');
-% ylabel('E(\phi)');
-% 
-% saveas(gcf,'plot_isoquants.eps','eps2c');        % save final figure
-
-%%
-
 % Plot constant mtr in var(ln(mrs)) & corr(mrs,earnings) space
 line(varLnThetaArray,corrArray,'LineWidth',2,'Color',[0 0 1]);
 axis([0 1 0 1]);
@@ -139,6 +105,4 @@ str2(2) = {'than conventional model'};
 text(0.3,0.45,str2,'FontSize',14);
 
 % display tax rate
-mtrTarget
-
-% saveas(gcf,'plot_isoquants2.eps','eps2c');        % save final figure
+disp(mtrTarget);
