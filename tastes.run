@@ -1,9 +1,8 @@
 # AMPL program file
 
 reset;
-option randseed 9;
-# chart created with seed=10, 500 agents
-option knitro_options "outlev=0 maxit=500 ms_enable=1 ms_maxsolves=20";
+option randseed 8;
+option knitro_options "outlev=0 maxit=500";
 
 
 ################################################################################
@@ -11,7 +10,6 @@ option knitro_options "outlev=0 maxit=500 ms_enable=1 ms_maxsolves=20";
 
 model tastes.mod;
 data tastes.dat;
-# let nAgents := 500; # overwrite nAgents param (default is 1000)
 let phibar := 1;
 
 
@@ -52,6 +50,4 @@ for {g in gammaSet} {
 ##  Create output for graphs of tax regime
 
 solve SwfMaximization; 
-# print {n in 1..nAgents}: yLF[n],y[n],c[n] > mtr.csv;
-# print {g in gammaSet, s in sigmaSet, p in phiSet}: mtr[g,s,p];
-csvdisplay mtr > mtr_imac.csv; 
+csvdisplay mtr > mtr_imac_2.csv; 
