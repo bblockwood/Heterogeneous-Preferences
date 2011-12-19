@@ -1,0 +1,57 @@
+# AMPL program file
+
+reset;
+option randseed 9;
+# chart created with seed=10, 500 agents
+option knitro_options "outlev=0 maxit=500 ms_enable=1 ms_maxsolves=20";
+
+
+################################################################################
+##  Solve multiple times for monte carlo estimates
+
+model tastes.mod;
+data tastes.dat;
+# let nAgents := 500; # overwrite nAgents param (default is 1000)
+let phibar := 1;
+
+
+################################################################################
+##  Loop over phibar to find optimal tax rates for each 
+
+set gammaSet;
+set sigmaSet;
+data; 
+set gammaSet := 0.5 1 2;
+set sigmaSet := 1.5 3 6;
+model;
+
+set phiSet := -1..2 by 0.2;
+param mtr {gammaSet,sigmaSet,phiSet} default 0;
+param aArray {phiSet} default 0;
+
+# Loop over combinations of gamma and sigma
+for {g in gammaSet} {
+    let gamma := g;
+	for {s in sigmaSet} {
+		let sigma := s;
+	    display gamma, sigma;
+
+		# Loop over mean(phi)
+		for {p in phiSet} {
+            let phibar := p;
+			display p;
+            solve SwfMaximization;
+            let mtr[g,s,p] := 1-b;
+			let aArray[p] := a;
+		};
+	};
+};
+
+
+################################################################################
+##  Create output for graphs of tax regime
+
+solve SwfMaximization; 
+# print {n in 1..nAgents}: yLF[n],y[n],c[n] > mtr.csv;
+# print {g in gammaSet, s in sigmaSet, p in phiSet}: mtr[g,s,p];
+csvdisplay mtr > mtr_imac.csv; 
