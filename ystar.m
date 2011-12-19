@@ -13,7 +13,7 @@
 % 
 % REQUIRED FUNCTIONS
 %   UTILDERIV
-%   NCPSOLVEBBL
+%   NCPSOLVE
 
 function yStarArray = ystar(lambdaArray,a,b)
 
@@ -27,6 +27,6 @@ yStarArray = zeros(nAgents,1);
 
 for i=1:nAgents
     lambda = lambdaArray(i);
-    y = ncpsolvebbl('utilderiv',0,inf,y,lambda,a,b); % requires y >= 0
+    y = ncpsolve('utilderiv',0,inf,y,lambda,a,b); % requires y >= 0
     yStarArray(i) = y;
 end 
