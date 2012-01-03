@@ -8,8 +8,10 @@
 % observationally equivalent to the pure preference cardinalization
 % U_i(c,l) = theta_i^(1-mu)*u(c)-theta^(-mu)*v(l), with
 % mu=(sigma-1)/(sigma+gamma-1). Agents are characterized by
-% lambda_i=theta_i^(1/sigma)*w_i, with lambda_i observable, and
-% phi_i*log(lambda_i)=w_i, (1-phi_i)*log(lambda_i)=theta_i^(1/sigma).
+% lambda_i=(theta_i*w_i^sigma)^(1/(sigma+gamma-1)), which is their optimal
+% income given a laissez faire tax regime, with 
+% theta_i = lambda_i^((sigma+gamma-1)*(1-phi_i)) and 
+% w_i = lambda_i^((sigma+gamma-1)*phi_i/sigma).
 % 
 % In this script we allow phi_i to vary. We suppose phi_i is drawn from a
 % normal distribution. For any such distribution of phi, there is a
@@ -26,11 +28,9 @@
 %   COMPECON (www4.ncsu.edu/~pfackler/compecon/toolbox.html)
 % 
 % REQUIRED FUNCTIONS
-%   BROYDEN
 %   COMPUTEYJACROW
 %   LAGRANGIAN
 %   LOADCOMPECON
-%   NCPSOLVE
 %   SIMULATEAGENTS
 %   UTILDERIV
 %   YJACOBIAN
@@ -42,7 +42,7 @@ loadcompecon();
 % Customizeable options:
 nAgents = 50;
 global GAMMA SIGMA;                     % declare global parameters
-GAMMA = 2;
+GAMMA = 1;
 SIGMA = 3;
 phibar = 1;                             % constant phi of interest
 options = optimset('Display', 'off');   % set optimization options

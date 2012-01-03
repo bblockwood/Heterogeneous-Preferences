@@ -8,8 +8,8 @@
 
 function ylfArray = simulateagents(nAgents)
 
-mu = 1.6;
-sd = 0.8;
+mu = 1.65;
+sd = 0.75;
 
 % Simulate lambdas (calibrated to US inc distribution in 10,000's)
 ylfArray = sort(lognrnd(mu, sd, nAgents, 1));

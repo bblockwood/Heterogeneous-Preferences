@@ -1,12 +1,9 @@
 # AMPL data file
 
-param nAgents := 2000;
+param nAgents := 1000;
 
-# param sigma := 1.5;
-# param gamma := 0.5;
-
-param mu := 1.6;
-param sd := 0.8;
+param mu := 1.65;
+param sd := 0.75;
 
 
 

@@ -8,8 +8,10 @@
 % observationally equivalent to the pure preference cardinalization
 % U_i(c,l) = theta_i^(1-mu)*u(c)-theta^(-mu)*v(l), with
 % mu=(sigma-1)/(sigma+gamma-1). Agents are characterized by
-% lambda_i=theta_i*w_i^sigma, with lambda_i observable, and
-% (phi_i/sigma)*log(lambda_i)=w_i, (1-phi_i)*log(lambda_i)=theta_i.
+% lambda_i=(theta_i*w_i^sigma)^(1/(sigma+gamma-1)), which is their optimal
+% income given a laissez faire tax regime, with 
+% theta_i = lambda_i^((sigma+gamma-1)*(1-phi_i)) and 
+% w_i = lambda_i^((sigma+gamma-1)*phi_i/sigma).
 % 
 % In this script we allow phi_i to vary. We suppose phi_i is drawn from a
 % normal distribution. For any such distribution of phi, there is a
@@ -24,11 +26,9 @@
 %   COMPECON (www4.ncsu.edu/~pfackler/compecon/toolbox.html)
 % 
 % REQUIRED FUNCTIONS
-%   BROYDEN
 %   FINDYJACROW
 %   LAGRANGIAN
 %   LOADCOMPECON
-%   NCPSOLVE
 %   SIMULATEAGENTS
 %   UTILDERIV
 %   YJACOBIAN
@@ -41,7 +41,7 @@ loadcompecon();
 % Customizeable options:
 nAgents = 500;
 global GAMMA SIGMA;
-GAMMA = 2;
+GAMMA = 1;
 SIGMA = 3;
 
 phibar = 0.8;                           % constant phi of interest
@@ -99,10 +99,10 @@ ylabel('corr(\theta,y)');
 % Add text boxes
 str1(1) = {'Less redistribution'};
 str1(2) = {'than conventional model'};
-text(0.6,0.75,str1,'FontSize',14);
+text(0.6,0.65,str1,'FontSize',14);
 str2(1) = {'More redistribution'};
 str2(2) = {'than conventional model'};
-text(0.3,0.45,str2,'FontSize',14);
+text(0.2,0.3,str2,'FontSize',14);
 
 % display tax rate
 disp(mtrTarget);

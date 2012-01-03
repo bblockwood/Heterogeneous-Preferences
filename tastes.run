@@ -1,7 +1,7 @@
 # AMPL program file
 
 reset;
-option randseed 8;
+option randseed 1;
 option knitro_options "outlev=0 maxit=500";
 
 
@@ -50,4 +50,4 @@ for {g in gammaSet} {
 ##  Create output for graphs of tax regime
 
 solve SwfMaximization; 
-csvdisplay mtr > mtr_imac_2.csv; 
+csvdisplay mtr > mtr.csv; 

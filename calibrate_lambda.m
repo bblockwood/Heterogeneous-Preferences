@@ -1,9 +1,11 @@
-% Calibrate lambda parameters to match observed US income quintiles
+% CALIBRATE_LAMBDA Calibrates parameters of lambda distribution. 
+% Finds the parameters of the lognormal distribution that minimize the
+% distance (sum of squares) between US income quintiles and simulated data.
 
 global GAMMA SIGMA;
-GAMMA = 2;
+GAMMA = 1;
 SIGMA = 3;
-nAgents = 1000;
+nAgents = 5000;
 
 % Lower bounds for deciles 2:5
 % source: http://pubdb3.census.gov/macro/032005/hhinc/new05_000.htm

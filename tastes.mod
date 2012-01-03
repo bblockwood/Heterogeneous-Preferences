@@ -31,8 +31,6 @@ param alphaWeights {i in I} = (theta[i])^((1-sigma)/(sigma+gamma-1));
 var y {i in I} >= 0 := yLF[i];
 
 # Govt chooses linear tax regime: c = a + b*y
-# var a >= 0;
-# var b <= 1, >= 0;
 var a;
 var b >= 0;
 
