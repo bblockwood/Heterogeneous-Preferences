@@ -11,9 +11,11 @@
 % OUTPUTS
 %   yStarArray  : vector of optimal earnings, given taxes
 % 
+% REQUIRED PACKAGES
+%   COMPECON
+% 
 % REQUIRED FUNCTIONS
 %   UTILDERIV
-%   NCPSOLVE
 
 function yStarArray = ystar(lambdaArray,a,b)
 
