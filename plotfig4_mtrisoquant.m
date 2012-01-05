@@ -10,8 +10,8 @@
 % mu=(sigma-1)/(sigma+gamma-1). Agents are characterized by
 % lambda_i=(theta_i*w_i^sigma)^(1/(sigma+gamma-1)), which is their optimal
 % income given a laissez faire tax regime, with 
-% theta_i = lambda_i^((sigma+gamma-1)*(1-phi_i)) and 
-% w_i = lambda_i^((sigma+gamma-1)*phi_i/sigma).
+% theta_i = lambda_i^((sigma+gamma-1)*phi_i) and 
+% w_i = lambda_i^((sigma+gamma-1)*(1-phi_i)/sigma).
 % 
 % In this script we allow phi_i to vary. We suppose phi_i is drawn from a
 % normal distribution. For any such distribution of phi, there is a
@@ -35,8 +35,6 @@
 %   YSTAR
 
 clear all;
-clc;
-loadcompecon();
 
 % Customizeable options:
 nAgents = 500;
@@ -44,11 +42,11 @@ global GAMMA SIGMA;
 GAMMA = 1;
 SIGMA = 3;
 
-phibar = 0.8;                           % constant phi of interest
+phibar = 0.2;                           % constant phi of interest
 options = optimset('Display', 'iter','MaxFunEvals',1000);
 
 lambdaArray = simulateagents(nAgents);  % simulate agents
-thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*(1-phibar));
+thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*phibar);
 
 % Generate matrix of phi deviations
 varPhiArray = [0.01 0.05:0.05:0.6];
@@ -84,7 +82,7 @@ for iPhiDist = 1:nPhiDists
     
     % For this MTR, find var(ln(theta)) and corr(theta,lambda)
     phiArray = sol(1) + demeanedPhiArray;
-    thetaArray = lambdaArray.^(1-phiArray);
+    thetaArray = lambdaArray.^((SIGMA+GAMMA-1)*phiArray);
     corrMrsEarnings = corr([thetaArray earnings]);
     varLnThetaArray(iPhiDist) = var(log(thetaArray));
     corrArray(iPhiDist) = corrMrsEarnings(2,1);    
@@ -99,10 +97,10 @@ ylabel('corr(\theta,y)');
 % Add text boxes
 str1(1) = {'Less redistribution'};
 str1(2) = {'than conventional model'};
-text(0.6,0.65,str1,'FontSize',14);
+text(0.6,0.75,str1,'FontSize',14);
 str2(1) = {'More redistribution'};
 str2(2) = {'than conventional model'};
-text(0.2,0.3,str2,'FontSize',14);
+text(0.3,0.4,str2,'FontSize',14);
 
 % display tax rate
 disp(mtrTarget);

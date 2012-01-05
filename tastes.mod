@@ -17,8 +17,8 @@ param phibar;
 param yLF {I} := exp(Normal(mu,sd));
 param lambda {i in I} := yLF[i]^sigma;
 param phi {I} := phibar;
-param theta {i in I} := lambda[i]^(1-phi[i]); 
-param w {i in I} := lambda[i]^(phi[i]/sigma);
+param theta {i in I} := lambda[i]^(phi[i]); 
+param w {i in I} := lambda[i]^((1-phi[i])/sigma);
 
 # Characterize planner: preference neutral cardinalization
 param alphaWeights {i in I} = (theta[i])^((1-sigma)/(sigma+gamma-1));

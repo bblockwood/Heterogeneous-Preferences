@@ -33,7 +33,7 @@ q = sol(3);
 b = 1-mtrTarget;
 
 phiArray = meanPhi+demeanedPhiArray;
-thetaArray = lambdaArray.^(1-phiArray);
+thetaArray = lambdaArray.^((SIGMA+GAMMA-1)*phiArray);
 
 yStarArray = ystar(lambdaArray,a,b);    % agents' earning choices given tax
 

@@ -10,8 +10,8 @@
 % mu=(sigma-1)/(sigma+gamma-1). Agents are characterized by
 % lambda_i=(theta_i*w_i^sigma)^(1/(sigma+gamma-1)), which is their optimal
 % income given a laissez faire tax regime, with 
-% theta_i = lambda_i^((sigma+gamma-1)*(1-phi_i)) and 
-% w_i = lambda_i^((sigma+gamma-1)*phi_i/sigma).
+% theta_i = lambda_i^((sigma+gamma-1)*phi_i) and 
+% w_i = lambda_i^((sigma+gamma-1)*(1-phi_i)/sigma).
 % 
 % This script finds the optimal linear tax regime (described by c=a+b*y)
 % when phi is drawn from a normal distribution with mean 1 and variance in
@@ -36,36 +36,37 @@
 %   YSTAR
 
 clear all;
-loadcompecon();
 
 % Customizeable options:
-nAgents = 500;
+nAgents = 1000;
 
 global GAMMA SIGMA;     % declare global parameters
 GAMMA = 1;
 SIGMA = 3;
 
 % Generate matrix of phi distributions
-meanPhi = 1;
-varPhiArray = 0:0.05:0.5;
+meanPhi = 0;
+% varPhiArray = 0:0.05:0.5;
+varPhiArray = 0:0.1:0.5;
+
 nPhiDists = size(varPhiArray,2);
 meanPhiMatrix = meanPhi.*ones(nAgents,nPhiDists);
 varPhiMatrix = normrnd(0,1,nAgents,1)*varPhiArray;
 phiMatrix = meanPhi + varPhiMatrix;
 
 lambdaArray = simulateagents(nAgents);      % simulate agents
-options = optimset('Display', 'iter');       % set optimization options
+options = optimset('Display', 'iter');      % set optimization options
 
 sol = [0; 1; 0.01]; % first guess of solution to lagrangian: [a; b; q]
 mtrArray = zeros(nPhiDists,1);
 for iPhi=1:nPhiDists
     phiArray = phiMatrix(:,iPhi);
-    disp(['iteration ' num2str(iPhi)]);             % display iter no.
-    thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*(1-phiArray));
+    disp(['iteration ' num2str(iPhi)]);     % display iter no.
+    thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*phiArray);
     
     % Find root of Lagrangian derivative
     sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
-    mtrArray(iPhi) = 1-sol(2);                  % mtr = 1-b
+    mtrArray(iPhi) = 1-sol(2);              % mtr = 1-b
 end
 
 % Plot results

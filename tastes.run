@@ -10,7 +10,7 @@ option knitro_options "outlev=0 maxit=500";
 
 model tastes.mod;
 data tastes.dat;
-let phibar := 1;
+let phibar := 0;
 
 
 ################################################################################
@@ -23,7 +23,7 @@ set gammaSet := 0.5 1 2;
 set sigmaSet := 1.5 3 6;
 model;
 
-set phiSet := -1..2 by 0.2;
+set phiSet := 2..-1 by -0.2;
 param mtr {gammaSet,sigmaSet,phiSet} default 0;
 param aArray {phiSet} default 0;
 

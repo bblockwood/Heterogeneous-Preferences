@@ -1,4 +1,4 @@
-% DISTRIBUTIONS OF PHI GENERATING SAME OPTIMAL MTR AS CONSTANT PHI=1
+% DISTRIBUTIONS OF PHI GENERATING SAME OPTIMAL MTR AS CONSTANT PHI=0
 % 
 % This script shows how preference heterogeneity affects the optimal
 % marginal tax rate (mtr). We suppose agents have the utility function
@@ -10,8 +10,8 @@
 % mu=(sigma-1)/(sigma+gamma-1). Agents are characterized by
 % lambda_i=(theta_i*w_i^sigma)^(1/(sigma+gamma-1)), which is their optimal
 % income given a laissez faire tax regime, with 
-% theta_i = lambda_i^((sigma+gamma-1)*(1-phi_i)) and 
-% w_i = lambda_i^((sigma+gamma-1)*phi_i/sigma).
+% theta_i = lambda_i^((sigma+gamma-1)*phi_i) and 
+% w_i = lambda_i^((sigma+gamma-1)*(1-phi_i)/sigma).
 % 
 % In this script we allow phi_i to vary. We suppose phi_i is drawn from a
 % normal distribution. For any such distribution of phi, there is a
@@ -37,18 +37,17 @@
 %   YSTAR
 
 clear all;
-loadcompecon();
 
 % Customizeable options:
 nAgents = 50;
 global GAMMA SIGMA;                     % declare global parameters
 GAMMA = 1;
 SIGMA = 3;
-phibar = 1;                             % constant phi of interest
+phibar = 0;                             % constant phi of interest
 options = optimset('Display', 'off');   % set optimization options
 
 lambdaArray = simulateagents(nAgents);                  % simulate agents
-thetaArray = lambdaArray.^((SIGMA+GAMMA-1)*(1-phibar));  % "tastes" vector
+thetaArray = lambdaArray.^((SIGMA+GAMMA-1)*phibar);  % "tastes" vector
 
 % Find optimal mtr given constant phibar
 sol = [0; 1; 0.01]; % first guess of solution to lagrangian: [a; b; q]
@@ -79,14 +78,14 @@ end
 
 % Plot results
 line(varPhiArray,meanPhiArray,'LineWidth',2,'Color',[0 0 1]);
-axis([0 0.5 0 1.5]);
+axis([0 0.5 -0.5 1]);
 xlabel('var(\phi)');
 ylabel('Required mean(\phi)');
 
 % Add text boxes
 str1(1) = {'Less redistribution'};
 str1(2) = {'than conventional model'};
-text(0.05,1.25,str1,'FontSize',14);
+text(0.15,0.1,str1,'FontSize',14);
 str2(1) = {'More redistribution'};
 str2(2) = {'than conventional model'};
-text(0.2,0.8,str2,'FontSize',14);
+text(0.05,-0.3,str2,'FontSize',14);

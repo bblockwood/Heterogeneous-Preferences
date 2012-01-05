@@ -31,8 +31,8 @@ for g=1:nGammas
         
         subplot(nGammas,nSigmas,i);
         hold on;
-        line([0 0],[yMin yMax]);
-        line([1 1],[yMin yMax]);
+        line([0 0],[yMin yMax],'Color',[0 0 0]);
+        line([1 1],[yMin yMax],'Color',[0 0 0]);
         line(phiArray,mtrArray,'Color',[0 0 1],'LineWidth',1.5);
         axis(axisBnds);
         hold off;
