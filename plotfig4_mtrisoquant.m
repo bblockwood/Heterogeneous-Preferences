@@ -95,11 +95,9 @@ xlabel('var(ln(\theta))');
 ylabel('corr(\theta,y)');
 
 % Add text boxes
-str1(1) = {'Less redistribution'};
-str1(2) = {'than conventional model'};
+str1 = {'Optimal \tau < \tau*'};
 text(0.6,0.75,str1,'FontSize',14);
-str2(1) = {'More redistribution'};
-str2(2) = {'than conventional model'};
+str2 = {'Optimal \tau > \tau*'};
 text(0.3,0.4,str2,'FontSize',14);
 
 % display tax rate
