@@ -46,13 +46,12 @@ SIGMA = 3;
 
 % Generate matrix of phi distributions
 meanPhi = 0;
-% varPhiArray = 0:0.05:0.5;
-varPhiArray = 0:0.1:0.5;
+sdPhiArray = 0:0.1:0.5;
 
-nPhiDists = size(varPhiArray,2);
+nPhiDists = size(sdPhiArray,2);
 meanPhiMatrix = meanPhi.*ones(nAgents,nPhiDists);
-varPhiMatrix = normrnd(0,1,nAgents,1)*varPhiArray;
-phiMatrix = meanPhi + varPhiMatrix;
+sdPhiMatrix = normrnd(0,1,nAgents,1)*sdPhiArray;
+phiMatrix = meanPhi + sdPhiMatrix;
 
 lambdaArray = simulateagents(nAgents);      % simulate agents
 options = optimset('Display', 'iter');      % set optimization options
@@ -70,7 +69,8 @@ for iPhi=1:nPhiDists
 end
 
 % Plot results
-line(varPhiArray,mtrArray,'LineWidth',2,'Color',[0 0 1]);%figure(gcf)
-axis([0 0.5 0 1]);
+varPhiArray = sdPhiArray.^2;
+line(varPhiArray,mtrArray,'LineWidth',2,'Color',[0 0 1]);
+axis([0 0.25 0 1]);
 xlabel('var(\phi)');
 ylabel('Marginal tax rate');

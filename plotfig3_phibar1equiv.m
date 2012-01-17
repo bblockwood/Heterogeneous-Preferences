@@ -39,7 +39,7 @@
 clear all;
 
 % Customizeable options:
-nAgents = 50;
+nAgents = 500;
 global GAMMA SIGMA;                     % declare global parameters
 GAMMA = 1;
 SIGMA = 3;
@@ -57,19 +57,20 @@ aGuess = sol(1);
 qGuess = sol(3);
 
 % Generate matrix of phi distributions
-varPhiArray = 0:0.1:0.5;
-nPhiDists = size(varPhiArray,2);
+sdPhiArray = 0:0.1:0.5;
+nPhiDists = size(sdPhiArray,2);
+rng(1);
 variationPhi = normrnd(0,1,nAgents,1);
 
 meanPhiArray = zeros(nPhiDists,1);
 sol = [phibar; aGuess; qGuess];     % initial guess is phibar solution
 for iPhiDist = 1:nPhiDists
-    varPhi = varPhiArray(iPhiDist);
-    disp(['var(phi) = ' num2str(varPhi)]);   % echo status
+    sdPhi = sdPhiArray(iPhiDist);
+    disp(['sd(phi) = ' num2str(sdPhi)]);   % echo status
     
-    if varPhi==0, meanPhiArray(iPhiDist)=phibar; continue, end % by design
+    if sdPhi==0, meanPhiArray(iPhiDist)=phibar; continue, end % by design
     
-    demeanedPhiArray = variationPhi*varPhi;
+    demeanedPhiArray = variationPhi*sdPhi;
     sol = fsolve(...
         @(x) lagrangianphibar(x,mtrTarget,demeanedPhiArray,lambdaArray),...
         sol,options);
@@ -77,15 +78,16 @@ for iPhiDist = 1:nPhiDists
 end
 
 % Plot results
+varPhiArray = sdPhiArray.^2;
 line(varPhiArray,meanPhiArray,'LineWidth',2,'Color',[0 0 1]);
-axis([0 0.5 -0.5 1]);
+axis([0 0.25 -0.5 1]);
 xlabel('var(\phi)');
 ylabel('Required mean(\phi)');
 
 % Add text boxes
 str1(1) = {'Less redistribution'};
 str1(2) = {'than conventional model'};
-text(0.15,0.1,str1,'FontSize',14);
+text(0.07,0.1,str1,'FontSize',14);
 str2(1) = {'More redistribution'};
 str2(2) = {'than conventional model'};
-text(0.05,-0.3,str2,'FontSize',14);
+text(0.02,-0.3,str2,'FontSize',14);
