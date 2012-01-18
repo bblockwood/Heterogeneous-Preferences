@@ -87,7 +87,7 @@ ylabel('Required mean(\phi)');
 % Add text boxes
 str1(1) = {'Less redistribution'};
 str1(2) = {'than conventional model'};
-text(0.07,0.1,str1,'FontSize',14);
+text(0.07,0,str1,'FontSize',14);
 str2(1) = {'More redistribution'};
 str2(2) = {'than conventional model'};
-text(0.02,-0.3,str2,'FontSize',14);
+text(0.015,-0.35,str2,'FontSize',14);
