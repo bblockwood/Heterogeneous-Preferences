@@ -38,8 +38,8 @@ clc;
 % Customizeable options:
 nAgents = 1000;
 nPhi = 50;
-nAgents = 50;       % for optimal tax calculation
-nPhi = 10;          % for optimal tax calculation
+% nAgents = 50;       % for optimal tax calculation
+% nPhi = 10;          % for optimal tax calculation
 nBins = 40;
 
 global GAMMA SIGMA;     % declare global parameters
@@ -54,9 +54,10 @@ draws = (stepsize/2:stepsize:1-stepsize/2)';
 lambdaArray = logninv(draws,mu,sd);
 
 wUB = 15;                                   % upper bound of horiz axis
-% freqUB = 10000;
+freqUB = 5000;
 axisBnds = [0 wUB 0 freqUB];
 options = optimset('Display', 'iter');      % set optimization options
+yTicks = [0; 0.5; 1]*freqUB;
 
 
 %% Mirrlees benchmark: E(phi) = 0, var(phi) = 0
@@ -64,32 +65,34 @@ phiBar = 0;
 wArray = lambdaArray.^((SIGMA+GAMMA-1)*(1-phiBar)/SIGMA);
 
 subplot(2,2,1);
-n = hist(wArray(wArray < wUB),nBins);
-freqUB = 1.5*max(n);
+hist(wArray(wArray < wUB),nBins);
 axis(axisBnds);
 title('E(\phi) = 0, var(\phi) = 0');
+set(gca,'YTick',yTicks,'YTickLabel',yTicks/(nAgents*nPhi));
+ylabel('Fraction of population');
 
-% Find optimal MTR
-sol = [2.8; 0.5; 0.2]; % first guess of solution to lagrangian: [a; b; q]
-thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*phiBar);
-sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
-mtrArray(1) = 1-sol(2)
+% % Find optimal MTR
+% sol = [2.8; 0.5; 0.2]; % first guess of solution to lagrangian: [a; b; q]
+% thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*phiBar);
+% sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
+% mtrArray(1) = 1-sol(2)
 
 
-%% E(phi) = 0.5, var(phi) = 0
-phiBar = 0.5;
+%% E(phi) = 0.2, var(phi) = 0
+phiBar = 0.2;
 wArray = lambdaArray.^((SIGMA+GAMMA-1)*(1-phiBar)/SIGMA);
 
 subplot(2,2,2);
 hist(wArray(wArray < wUB),nBins);
 axis(axisBnds);
-title('E(\phi) = 0.5, var(\phi) = 0');
+title('E(\phi) = 0.2, var(\phi) = 0');
+set(gca,'YTick',yTicks,'YTickLabel',yTicks/(nAgents*nPhi));
 
-% Find optimal MTR
-sol = [1.8; 0.7; 0.4]; % first guess of solution to lagrangian: [a; b; q]
-thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*phiBar);
-sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
-mtrArray(2) = 1-sol(2)
+% % Find optimal MTR
+% sol = [1.8; 0.7; 0.4]; % first guess of solution to lagrangian: [a; b; q]
+% thetaArray = lambdaArray.^((SIGMA + GAMMA - 1)*phiBar);
+% sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
+% mtrArray(2) = 1-sol(2)
 
 
 %% Prep for variable phi
@@ -103,42 +106,46 @@ draws = (stepsize/2:stepsize:1-stepsize/2)';
 normArray = norminv(draws,0,1);
 
 
-%% E(phi) = 0, var(phi) = 0.25
+%% E(phi) = 0, var(phi) = 0.1
 lambdaMat = repmat(lambdaArray,1,nPhi);
-phiArray = 0.5*normArray;
+phiArray = sqrt(0.1)*normArray;
 phiMat = repmat(phiArray',nAgents,1);
 wMat = lambdaMat.^((SIGMA+GAMMA-1)*(1-phiMat)/SIGMA);
 wArray = wMat(:);
 subplot(2,2,3);
 hist(wArray(wArray < wUB),nBins);
 axis(axisBnds);
-title('E(\phi) = 0, var(\phi) = 0.25');
+title('E(\phi) = 0, var(\phi) = 0.1');
+set(gca,'YTick',yTicks,'YTickLabel',yTicks/(nAgents*nPhi));
+xlabel('w');
+ylabel('Fraction of population');
 
 % Find optimal MTR
-sol = [2.2; 0.6; 0.2]; % first guess of solution to lagrangian: [a; b; q]
-thetaMat = lambdaMat.^((SIGMA + GAMMA - 1)*phiMat);
-thetaArray = thetaMat(:);
-lambdaArray = lambdaMat(:);
-sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
-mtrArray(3) = 1-sol(2)
+% sol = [2.2; 0.6; 0.2]; % first guess of solution to lagrangian: [a; b; q]
+% thetaMat = lambdaMat.^((SIGMA + GAMMA - 1)*phiMat);
+% thetaArray = thetaMat(:);
+% lambdaArray = lambdaMat(:);
+% sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
+% mtrArray(3) = 1-sol(2)
 
 
-
-%% E(phi) = 0.5, var(phi) = 0.25
+%% E(phi) = 0.2, var(phi) = 0.1
 lambdaMat = repmat(lambdaArray,1,nPhi);
-phiArray = 0.5*normArray+0.5;
+phiArray = sqrt(0.1)*normArray+0.2;
 phiMat = repmat(phiArray',nAgents,1);
 wMat = lambdaMat.^((SIGMA+GAMMA-1)*(1-phiMat)/SIGMA);
 wArray = wMat(:);
 subplot(2,2,4);
 hist(wArray(wArray < wUB),nBins);
 axis(axisBnds);
-title('E(\phi) = 0.5, var(\phi) = 0.25');
+title('E(\phi) = 0.2, var(\phi) = 0.1');
+set(gca,'YTick',yTicks,'YTickLabel',yTicks/(nAgents*nPhi));
+xlabel('w');
 
-% Find optimal MTR
-sol = [1.8; 0.7; 0.4]; % first guess of solution to lagrangian: [a; b; q]
-thetaMat = lambdaMat.^((SIGMA + GAMMA - 1)*phiMat);
-thetaArray = thetaMat(:);
-lambdaArray = lambdaMat(:);
-sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
-mtrArray(4) = 1-sol(2)
+% % Find optimal MTR
+% sol = [1.8; 0.7; 0.4]; % first guess of solution to lagrangian: [a; b; q]
+% thetaMat = lambdaMat.^((SIGMA + GAMMA - 1)*phiMat);
+% thetaArray = thetaMat(:);
+% lambdaArray = lambdaMat(:);
+% sol = fsolve(@(x)lagrangian(x,thetaArray,lambdaArray),sol,options);
+% mtrArray(4) = 1-sol(2)
